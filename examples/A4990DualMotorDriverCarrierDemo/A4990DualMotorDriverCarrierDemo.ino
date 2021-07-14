@@ -10,7 +10,7 @@
 
 //**************************************************
 // Change this constructor to match your pinout!!!
-A4990DualMotorDriverCarrier motors(5, 6, 9, 10);
+A4990DualMotorDriverCarrier motors(7, 9, 10, 11);
 //**************************************************
 
 void setup()
@@ -30,17 +30,45 @@ void setup()
 
   //**************************************************
   // Change this constructor to match your pinout!!!
-  motors.enableInterrupts(0, 7, 1, 8); // Note that 0, 1 (the interrupt pins) stand for INT0/INT1 and NOT for PD0 or PD1
+  motors.enableInterrupts(3, 4, 1, 8); // Note that 0, 1 (the interrupt pins) stand for INT0/INT1 and NOT for PD0 or PD1
   //**************************************************
 
-  motors.setM2Speed(127);
-  motors.stopIfFault();    // It is good practice to stop if there are any errors, stopIfFault() is included for convenience
+  //motors.setM2Speed(127);
+  //motors.stopIfFault();    // It is good practice to stop if there are any errors, stopIfFault() is included for convenience
 }
 
 void loop()
 {
-    if (motors.changeFlagM2 == true) {
-      motors.changeFlagM2 = false;
-      Serial.println(motors.readM2Rotation());
-    }
+    for (int speed = 0; speed <= 200; speed++)
+  {
+    motors.setM1Speed(speed);
+    //stopIfFault();
+    delay(2);
+  }
+
+  for (int speed = 200; speed >= 0; speed--)
+  {
+    motors.setM1Speed(speed);
+    //stopIfFault();
+    delay(2);
+  }
+  
+  // run M1 motor with negative speed
+  
+  digitalWrite(LED_PIN, LOW);
+  
+  for (int speed = 0; speed >= -200; speed--)
+  {
+    motors.setM1Speed(speed);
+    //stopIfFault();
+    delay(2);
+  }
+  
+  for (int speed = -200; speed <= 0; speed++)
+  {
+    motors.setM1Speed(speed);
+    //stopIfFault();
+    delay(2);
+  }
+
 }
